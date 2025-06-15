@@ -10,7 +10,7 @@ const Rating = ({
 
   useEffect(() => {
     onRatingChange(selectedRating);
-  }, [selectedRating, onRatingChange]);
+  }, [selectedRating]);
 
   const handleStarClick = (value) => {
     if (isEditable) {

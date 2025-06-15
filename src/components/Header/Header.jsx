@@ -1,18 +1,46 @@
 import React from "react";
-import { CgMenuGridR } from "react-icons/cg"
+import { CgMenuGridR } from "react-icons/cg";
+import Filterbar from "../../Pages/Cart/Home/FilterBar/Filterbar";
 
 const Header = () => {
   return (
     <div className="navbar bg-base-100 border-b border-b-white/20 sticky top-0 z-[100]">
-      {/* Fake store Logo */}
+      {/* Left side - Drawer and Logo in same row */}
       <div className="flex-1">
-        <button className="btn hover:bg-white hover:text-black transition-all duration-200">
-          <CgMenuGridR />
-        </button>
-
-        <a className="btn btn-ghost text-xl">Fake Store</a>
+        <div className="flex items-center gap-1">
+          {/* Drawer - only the button, not the whole drawer */}
+          <div className="min-[570px]:hidden">
+            <label
+              htmlFor="my-drawer"
+              className="btn btn-outline btn-info drawer-button p-3"
+            >
+              <CgMenuGridR className="w-6 h-6" />
+            </label>
+          </div>
+          
+          {/* Fake store Logo */}
+          <div className="logodiv">
+            <a className="btn btn-ghost text-xl">Fake Store</a>
+          </div>
+        </div>
+        
+        {/* Drawer structure - positioned outside the flex container */}
+        <div className="drawer min-[570px]:hidden">
+          <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+          <div className="drawer-side">
+            <label
+              htmlFor="my-drawer"
+              aria-label="close sidebar"
+              className="drawer-overlay"
+            ></label>
+            <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+              <Filterbar/>
+            </ul>
+          </div>
+        </div>
       </div>
-      {/* Search Bar */}
+
+      {/* Right side - Search Bar and Cart */}
       <div className="flex gap-3">
         <div className="form-control">
           <input
@@ -22,7 +50,7 @@ const Header = () => {
           />
         </div>
         <div className="dropdown dropdown-end">
-          <div tabindex="0" role="button" className="btn btn-ghost btn-circle">
+          <div tabIndex="0" role="button" className="btn btn-ghost btn-circle">
             <div className="indicator">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -31,21 +59,20 @@ const Header = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                {" "}
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />{" "}
+                />
               </svg>
               <span className="badge badge-sm indicator-item">8</span>
             </div>
           </div>
-          {/* cart logo */}
+          {/* cart dropdown */}
           <div
-            tabindex="0"
-            className="card card-compact dropdown-content bg-base-100 z-1 mt-3 w-52 shadow"
+            tabIndex="0"
+            className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow"
           >
             <div className="card-body">
               <span className="text-lg font-bold">8 Items</span>

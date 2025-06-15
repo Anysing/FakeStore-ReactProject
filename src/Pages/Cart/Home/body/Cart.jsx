@@ -9,7 +9,7 @@ const Cart = ({ productDetail }) => {
         <img
           src={productDetail.image}
           alt="Shoes"
-          className="aspect-video object-cover"
+          className="aspect-video object-cover h-full w-full"
         />
       </figure>
       <div className="card-body">

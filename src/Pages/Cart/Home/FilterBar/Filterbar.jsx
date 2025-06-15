@@ -9,11 +9,11 @@ const Filterbar = () => {
   });
 
   const handleinputchange = (e) => {
-    const { name, value } = e.target;
+    const {value} = e.target;
 
     setFilter((prev) => ({
       ...prev,
-      [name]: value,
+      price: value,
     }));
   };
 
@@ -87,7 +87,6 @@ const Filterbar = () => {
         </p>
         <input
           type="range"
-          name="price"
           min={0}
           max={5000}
           value={Filter.price}
