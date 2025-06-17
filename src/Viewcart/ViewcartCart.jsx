@@ -1,12 +1,15 @@
-import Rating from "../../../../components/Header/Rating/Rating";
 import { AiOutlineThunderbolt } from "react-icons/ai";
-import { useCartContext } from "../../../../context/cartcontext/CartContext";
+import { useCartContext } from "../context/cartcontext/CartContext";
+import { FaPlus } from "react-icons/fa6";
+import { FaMinus } from "react-icons/fa";
 
-const Cart = ({ productDetail }) => {
+const ViewcartCart = ({ productDetail }) => {
   const {
     state: { cart },
     dispatch,
   } = useCartContext();
+
+  console.log(cart);
 
   const handleAddToCart = () => {
     dispatch({ type: "ADD_TO_CART", payload: productDetail });
@@ -14,6 +17,15 @@ const Cart = ({ productDetail }) => {
 
   const handleRemoveFromCart = () => {
     dispatch({ type: "REMOVE_FROM_CART", payload: productDetail });
+  };
+
+  const handleincreasequantity = () => {
+    dispatch({ type: "INCREMENT_QUANTITY", payload: productDetail });
+  };
+
+  const handledecreasequantity = () => {
+    if (productDetail.quantity <= 1) return
+    dispatch({ type: "DECREMENT_QUANTITY", payload: productDetail });
   };
 
   return (
@@ -28,19 +40,30 @@ const Cart = ({ productDetail }) => {
       <div className="card-body">
         <h2 className="card-title">
           <span className="line-clamp-1">{productDetail.productName}</span>
-          {productDetail.new && (
-            <div className="badge badge-secondary">NEW</div>
-          )}
         </h2>
-        <div>
-          <p className="line-clamp-2">{productDetail.productDescription}</p>
+        <div className="flex items-center gap-4">
+          <p>
+            <strong>{productDetail.price}</strong> Rs
+          </p>
+          <button
+            onClick={handleincreasequantity}
+            className="btn btn-square btn-outline btn-sm"
+          >
+            <FaPlus />
+          </button>
+          <span className="text-xl font-semibold">
+            {productDetail.quantity}
+          </span>
+          <button
+            onClick={handledecreasequantity}
+            className="btn btn-square btn-outline btn-sm"
+          >
+            <FaMinus />
+          </button>
         </div>
-        <p>
-          <strong>{productDetail.price}</strong> Rs
-        </p>
-        {productDetail.inStock ? (
+        {productDetail.instock ? (
           <p className="text-green-500">
-            {productDetail.inStock} items left..!!
+            {productDetail.instock} items left..!!
           </p>
         ) : (
           <p className="text-red-500">Out of Stock..!!</p>
@@ -52,11 +75,7 @@ const Cart = ({ productDetail }) => {
         ) : (
           <p className="text-blue-400">5 Days Delivery</p>
         )}
-        <Rating
-          defaultRating={productDetail.ratings}
-          isEditable={false}
-          className="w-4 h-4"
-        />
+
         <div className="card-actions justify-between mt-4">
           {cart.some((p) => p.id === productDetail.id) ? (
             <button
@@ -86,4 +105,4 @@ const Cart = ({ productDetail }) => {
   );
 };
 
-export default Cart;
+export default ViewcartCart;

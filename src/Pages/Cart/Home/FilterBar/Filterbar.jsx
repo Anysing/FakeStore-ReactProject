@@ -1,21 +1,67 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Rating from "../../../../components/Header/Rating/Rating";
 import { useState } from "react";
+import { useCartContext } from "../../../../context/cartcontext/CartContext";
 
 const Filterbar = () => {
-  const [Filter, setFilter] = useState({
+
+  const initialFilter = {
     price: 5000,
     Ratings: 1,
-  });
+    SortingType : false,
+    IncludeOutOfStock : true,
+    IncludeFastDelivery : false
+  }
+
+  const {
+    state: { unfilteredProducts }, dispatch,
+  } = useCartContext()
+  
+
+  const [Filter, setFilter] = useState(initialFilter);
 
   const handleinputchange = (e) => {
-    const {value} = e.target;
+    const {name , value,checked,type} = e.target;
 
     setFilter((prev) => ({
       ...prev,
-      price: value,
+      [name]: type === 'checkbox'? checked : value,
     }));
   };
+
+  const handleClearFilter = () => {
+    setFilter(initialFilter)
+  }
+
+  useEffect(() => {
+    let filteredItems = unfilteredProducts.filter((p) => {
+      let priceCondition = p.price <= Filter.price;
+      let ratingCondition = p.ratings >= Filter.Ratings;
+      let includeOutOfStockCondition = Filter.IncludeOutOfStock
+        ? true
+        : p.inStock;
+      let deliveryCondition = Filter.IncludeFastDelivery ? p.fastDelivery : true;
+      return (
+        includeOutOfStockCondition &&
+        priceCondition &&
+        ratingCondition &&
+        deliveryCondition
+      );
+    });
+
+    filteredItems = Filter.SortingType
+      ? filteredItems.sort((Pa, Pb) => {
+          return Filter.SortingType === "ascending"
+            ? Pa.productName.localeCompare(Pb.productName)
+            : Pb.productName.localeCompare(Pa.productName);
+        })
+      : filteredItems;
+
+    dispatch({
+      type : "SET_SEARCHVALUE",
+      payload : filteredItems
+    })
+  }, [Filter,unfilteredProducts])
 
   return (
     // radio button
@@ -26,9 +72,10 @@ const Filterbar = () => {
             <span className="label-text">Ascending</span>
             <input
               type="radio"
-              name="radio-4"
+              name="SortingType"
               className="radio radio-primary"
-              defaultChecked
+              value= "ascending"
+              onChange={handleinputchange}
             />
           </label>
         </div>
@@ -37,9 +84,10 @@ const Filterbar = () => {
             <span className="label-text">Descending</span>
             <input
               type="radio"
-              name="radio-4"
+              name="SortingType"
               className="radio radio-primary"
-              defaultChecked
+              value= "descending"
+              onChange={handleinputchange}
             />
           </label>
         </div>
@@ -52,8 +100,10 @@ const Filterbar = () => {
             <span className="label-text">Include Out Of Stock</span>
             <input
               type="checkbox"
-              defaultChecked
+              checked = {Filter.IncludeOutOfStock}
+              name="IncludeOutOfStock"
               className="checkbox checkbox-primary"
+              onChange={handleinputchange}
             />
           </label>
         </div>
@@ -62,8 +112,10 @@ const Filterbar = () => {
             <span className="label-text">Fast Delivery Only</span>
             <input
               type="checkbox"
-              defaultChecked
+              checked = {Filter.IncludeFastDelivery}
+              name="IncludeFastDelivery"
               className="checkbox checkbox-primary"
+              onChange={handleinputchange}
             />
           </label>
         </div>
@@ -86,6 +138,7 @@ const Filterbar = () => {
           Price : <strong>{Filter.price}</strong> Rs
         </p>
         <input
+          name="price"
           type="range"
           min={0}
           max={5000}
@@ -96,7 +149,7 @@ const Filterbar = () => {
       </div>
       {/* clear filter button */}
       <div className="flex justify-center">
-        <button className="btn btn-soft w-full">Clear Filter</button>
+        <button onClick={handleClearFilter} className="btn btn-soft w-full">Clear Filter</button>
       </div>
     </div>
   );
