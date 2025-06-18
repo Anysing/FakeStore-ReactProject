@@ -41,7 +41,7 @@ const Header = () => {
       <div className="flex-1">
         <div className="flex items-center gap-1">
           {/* Drawer - only the button, not the whole drawer */}
-          <div>
+          <div className="min-[570px]:hidden">
             <label
               htmlFor="my-drawer"
               className="btn btn-outline btn-info drawer-button p-3"
@@ -59,7 +59,7 @@ const Header = () => {
         </div>
 
         {/* Drawer structure - positioned outside the flex container */}
-        <div className="drawer">  
+        <div className="drawer min-[570px]:hidden">
           <input id="my-drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-side">
             <label
