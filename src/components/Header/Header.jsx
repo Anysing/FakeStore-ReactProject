@@ -59,7 +59,7 @@ const Header = () => {
         </div>
 
         {/* Drawer structure - positioned outside the flex container */}
-        <div className="drawer min-[570px]:hidden">
+        <div className="drawer ">
           <input id="my-drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-side">
             <label
